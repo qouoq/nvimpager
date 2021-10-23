@@ -3,6 +3,7 @@ PREFIX ?= /usr/local
 RUNTIME = $(PREFIX)/share/nvimpager/runtime
 VERSION = $(lastword $(shell ./nvimpager -v))
 BUSTED = busted
+LEGACY_ROFF = false
 
 %.configured: %
 	sed 's#^RUNTIME=.*$$#RUNTIME='"'$(RUNTIME)'"'#;s#version=.*$$#version=$(VERSION)#' < $< > $@
@@ -23,7 +24,13 @@ uninstall:
 
 nvimpager.1: SOURCE_DATE_EPOCH = $(shell git log -1 --no-show-signature --pretty="%ct" 2>/dev/null || echo 1636921311)
 nvimpager.1: nvimpager.md
-	sed '1s/$$/ "nvimpager $(VERSION)"/' $< | scdoc > $@
+	sed '1s/$$/ "nvimpager $(VERSION)"/' $< \
+	  | if $(LEGACY_ROFF); then \
+	  sed '/table start/,/table end/d;/list start/,/list end/{/list start/d;/list end/d;s/^; //;}'; \
+	  else \
+	  cat; \
+	  fi \
+	  | scdoc > $@
 
 test:
 	@$(BUSTED) test

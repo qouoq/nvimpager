@@ -63,7 +63,9 @@ make PREFIX=$HOME/.local install
 ```
 
 Additionally the variable `BUSTED` can be used to specify the executable for
-the test suite.
+the test suite, and the variable `LEGACY_ROFF` can be set to `true` in order
+to produce a man page compatible with older versions of roff (without table
+support).
 
 ## Development
 

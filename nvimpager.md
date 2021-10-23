@@ -79,6 +79,8 @@ specific to nvimpager.
 
 The following fields (options) exist:
 
+; table start
+
 [[ *option*
 :- *type*
 :- *default*
@@ -101,6 +103,20 @@ The following fields (options) exist:
 :  bool
 :  true
 :  if some default less like maps should be defined inside pager mode
+
+; table end
+; list start
+
+; - *follow* (_false_): start in follow mode, i.e. continuously load changes to
+;   the opened file and scroll to the bottom (like *less +F* or *tail -f*)
+; - *follow_interval* (_500_): how often in ms the underlying file should be
+;   checked in follow mode
+; - *git_colors*: (_false_):  use git command highlighting instead of nvim
+;   syntax highlighting, set this to true if you use an external diff
+; - *maps* (_true_): if some default less like maps should be defined inside
+;   pager mode
+
+; list end
 
 So to start nvimpager and follow changes to the opened file the user can put
 
