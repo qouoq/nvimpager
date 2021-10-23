@@ -36,6 +36,12 @@ jobs:
       run: script typescript make test BUSTED="$HOME/.luarocks/bin/busted --exclude-tags=osx_pending"
       env:
         TERM: dumb
+    - name: format the man page for legacy roff
+      run: make  install PREFIX=$HOME/.local LEGACY_ROFF=true;;
+    - name: check that the man page can be rendered
+      run: |
+        test -z "$(man ./nvimpager.1 2>&1 >/dev/null)";&
+        man ./nvimpager.1 | col -b | grep follow_interval
 
   nix:
     runs-on: ubuntu-latest
