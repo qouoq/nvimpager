@@ -37,7 +37,7 @@ jobs:
       env:
         TERM: dumb
     - name: format the man page for legacy roff
-      run: make  install PREFIX=$HOME/.local LEGACY_ROFF=true;;
+      run: make  install PREFIX=$HOME/.local LEGACY_ROFF=true
     - name: check that the man page can be rendered
       run: |
         test -z "$(man ./nvimpager.1 2>&1 >/dev/null)";&
