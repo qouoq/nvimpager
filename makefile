@@ -23,15 +23,6 @@ uninstall:
 	  $(PREFIX)/share/zsh/site-functions/_nvimpager
 
 nvimpager.1: SOURCE_DATE_EPOCH = $(shell git log -1 --no-show-signature --pretty="%ct" 2>/dev/null || echo 1636921311)
-nvimpager.1: nvimpager.md
-	sed '1s/$$/ "nvimpager $(VERSION)"/' $< \
-	  | if $(LEGACY_ROFF); then \
-	  sed '/table start/,/table end/d;/list start/,/list end/{/list start/d;/list end/d;s/^; //;}'; \
-	  else \
-	  cat; \
-	  fi \
-	  | scdoc > $@
-
 # awk snippet to convert the github markdown table to a scdoc table or list
 # dependening on the LEGACY_ROFF=true request from the user
 ifeq ($(LEGACY_ROFF),true)
@@ -43,8 +34,7 @@ else
 AWK_SCRIPT = NF==6 && $$6 == "" { print "[[" $$2; print ":-" $$3; print ":-" $$4; print ":<" $$5; next } \
 	     NF==5 { print "| " $$2; print ": " $$3; print ": " $$4; print ": " $$5; next }
 endif
-
-nvimpager.2: nvimpager.md2
+nvimpager.1: nvimpager.md
 	sed '1s/$$/ "nvimpager $(VERSION)"/' $< \
 	  | awk -F '|' ' \
 	    /^\| -* \| -* \| -* \| -* \|$$/ { next } \
