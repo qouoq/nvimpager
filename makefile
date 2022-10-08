@@ -32,6 +32,26 @@ nvimpager.1: nvimpager.md
 	  fi \
 	  | scdoc > $@
 
+# awk snippet to convert the github markdown table to a scdoc table or list
+# dependening on the LEGACY_ROFF=true request from the user
+ifeq ($(LEGACY_ROFF),true)
+# delete the header line which has six fields, create a simple list entry for
+# the other lines
+AWK_SCRIPT = NF==6 && $$6 == "" { next } \
+	     NF==5 { print "- *" $$2 "* (" $$3 ", default " $$4 "): " $$5; next }
+else
+AWK_SCRIPT = NF==6 && $$6 == "" { print "[[" $$2; print ":-" $$3; print ":-" $$4; print ":<" $$5; next } \
+	     NF==5 { print "| " $$2; print ": " $$3; print ": " $$4; print ": " $$5; next }
+endif
+
+nvimpager.2: nvimpager.md2
+	sed '1s/$$/ "nvimpager $(VERSION)"/' $< \
+	  | awk -F '|' ' \
+	    /^\| -* \| -* \| -* \| -* \|$$/ { next } \
+	    $(AWK_SCRIPT) \
+	    { print }' \
+	  | scdoc > $@
+
 test:
 	@$(BUSTED) test
 luacov.stats.out: nvimpager lua/nvimpager.lua test/nvimpager_spec.lua
