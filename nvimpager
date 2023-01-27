@@ -131,4 +131,4 @@ if [[ $mode = cat || \
 then
   args1+=(--headless)
 fi
-exec -a nvimpager $nvim "${args1[@]}" "${files[@]}" "$@" "${args2[@]}"
+exec $nvim "${args1[@]}" "${files[@]}" "$@" "${args2[@]}"
